@@ -3,9 +3,7 @@ version: "3"
 services:
 
   rabbitmq:
-    build:
-      context: .
-      dockerfile: rabbitmq.dockerfile
+    image: tppg21/rabbitmq:latest
     healthcheck:
       interval: 10s
       retries: 10
@@ -83,7 +81,7 @@ services:
     networks:
       - custom_network
     depends_on:
-      - rabbit
+      - rabbitmq
       - redis
       - mongodb
       - gcs
@@ -97,7 +95,7 @@ services:
     networks:
       - custom_network
     depends_on:
-      - rabbit
+      - rabbitmq
       - redis
       - mongodb
       - gcs
@@ -109,7 +107,7 @@ services:
       - custom_network
     command: ["./build/bin/FaceLandmarkImg", "-aus"]
     depends_on:
-      - rabbit
+      - rabbitmq
 
   valence-processor:
     image: tppg21/valence-processor:latest
@@ -122,7 +120,7 @@ services:
     networks:
       - custom_network
     depends_on:
-      - rabbit
+      - rabbitmq
 
 volumes:
   mongodb-data:

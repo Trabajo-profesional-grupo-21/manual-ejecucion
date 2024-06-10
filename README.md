@@ -6,7 +6,11 @@ Manual para poder ejecutar el sistema.
 
 ## Indice
 
-[TOC]
+- [Manual de ejecucion](#manual-de-ejecución)
+  - [Indice](#indice)
+  - [Requisitos](#requisitos)
+  - [Ejecución en simultaneo (recomendado)](#ejecución-en-simultaneo)
+  - [Ejecución por separado (para desarrollo)](#ejecución-por-separado)
 
 ## Requisitos
 
@@ -24,7 +28,7 @@ En cuanto a hardware recomendamos contar con al menos 12GB de memoria RAM y proc
 
 
 
-## Ejecución en simultaneo (recomendado)
+## Ejecución en simultaneo
 
 Para poder probar el sistema y ejecutar todos los componentes en simultaneo se brinda a continuación un `docker-compose.yaml` el cual contiene todos los servicios necesarios.
 
@@ -34,7 +38,7 @@ A su vez, el `docker-compose.yaml` creara servicios locales de RabbitMQ, Redis, 
 
 Pasos a seguir:
 
-- Descargar el siguiente `docker-compose.yaml`: [Archivo](https://raw.githubusercontent.com/Trabajo-profesional-grupo-21/manual-ejecucion/main/resources/docker-compose.yaml)
+- Descargar el siguiente `docker-compose.yaml`: [Archivo](https://github.com/Trabajo-profesional-grupo-21/manual-ejecucion/blob/main/resources/docker-compose.yaml)
 
 - En el directorio donde se encuentra el archivo ejecutar: 
 
@@ -42,7 +46,7 @@ Pasos a seguir:
   docker compose up
   ```
 
-- Esto abrirá un navegador con la interfaz web listo para ser usado
+- Una vez levantados todos los servicios, se puede interactuar con el Frontend abriendo el navegador en `http://localhost:3000/`  o clickeando en: [Link al Frontend](http://localhost:3000/)
 
 - Una vez finalizado puede eliminar los contenedores ejecutando:
 
@@ -52,10 +56,10 @@ Pasos a seguir:
 
   
 
-## Ejecución por separado (para desarrollo)
+## Ejecución por separado
 
-Para poder ejecutar el sistema de forma sencilla todos los repositorios cuentan con un `docker-compose.yalm` el cual sirve para levantar los diferentes componentes.
+Para poder realizar pruebas en componentes particulares, para desarrollo de nuevas funcionalidad, o si se quiere levantar el sistema sin utilizar los emuladores, es posible ejecutar cada componente por separado.
 
-
+Para esto todos los repositorios cuentan con un `docker-compose.yaml` el cual sirve para iniciar los diferentes componentes.
 
 WIP
