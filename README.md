@@ -34,7 +34,7 @@ A su vez, el `docker-compose.yaml` creara servicios locales de RabbitMQ, Redis, 
 
 Pasos a seguir:
 
-- Descargar el siguiente `docker-compose.yaml`: [Archivo]()
+- Descargar el siguiente `docker-compose.yaml`: [Archivo](https://raw.githubusercontent.com/Trabajo-profesional-grupo-21/manual-ejecucion/main/resources/docker-compose.yaml)
 
 - En el directorio donde se encuentra el archivo ejecutar: 
 
