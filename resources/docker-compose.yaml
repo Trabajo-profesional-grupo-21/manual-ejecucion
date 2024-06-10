@@ -1,0 +1,139 @@
+version: "3"
+
+services:
+
+  rabbitmq:
+    build:
+      context: .
+      dockerfile: rabbitmq.dockerfile
+    healthcheck:
+      interval: 10s
+      retries: 10
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:15672
+      timeout: 5s
+    container_name: rabbitmq
+    ports:
+    - 15672:15672
+    - 5672:5672
+    networks:
+      - custom_network
+
+  gcs:
+    image: fsouza/fake-gcs-server
+    command: -scheme both -port-http 8001 -public-host ${URL:-localhost}:8001
+    ports:
+      - "4443:4443"
+      - "8001:8001"
+    volumes:
+      - ./data:/storage
+    restart: always
+    container_name: gcs
+    networks:
+      - custom_network
+
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    hostname: mongodb
+    volumes:
+      - ./mongodb/initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+      - mongodb-data:/data/db/
+      - mongodb-log:/var/log/mongodb/
+    ports:
+      - "27017:27017"
+    networks:
+      - custom_network
+
+  # mongo-express:
+  #   image: mongo-express:latest
+  #   container_name: mongo-express
+  #   restart: always
+  #   environment:
+  #     ME_CONFIG_MONGODB_PORT: 27017
+  #     ME_CONFIG_MONGODB_SERVER: mongodb
+  #     ME_CONFIG_BASICAUTH_USERNAME: admin
+  #     ME_CONFIG_BASICAUTH_PASSWORD: password
+  #   ports:
+  #     - 8081:8081
+  #   networks:
+  #     - custom_network
+  #   depends_on:
+  #     - mongodb
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    networks:
+      - custom_network
+
+  api:
+    image: tppg21/api:latest
+    container_name: api
+    environment:
+    - PYTHONUNBUFFERED=1
+    - ID=api
+    ports:
+      - "8000:8000"
+    networks:
+      - custom_network
+    depends_on:
+      - rabbit
+      - redis
+      - mongodb
+      - gcs
+    
+  joiner:
+    image: tppg21/joiner:latest
+    container_name: joiner
+    environment:
+    - PYTHONUNBUFFERED=1
+    - ID=joiner
+    networks:
+      - custom_network
+    depends_on:
+      - rabbit
+      - redis
+      - mongodb
+      - gcs
+
+  arousal-processor:
+    image: tppg21/arousal-processor:latest
+    container_name: arousal-processor
+    networks:
+      - custom_network
+    command: ["./build/bin/FaceLandmarkImg", "-aus"]
+    depends_on:
+      - rabbit
+
+  valence-processor:
+    image: tppg21/valence-processor:latest
+    container_name: valence-processor
+    environment:
+    - PYTHONUNBUFFERED=1
+    - ID=valence-processor
+    volumes:
+      - feat_resources_volume:/usr/local/lib/python3.11/site-packages/feat/resources
+    networks:
+      - custom_network
+    depends_on:
+      - rabbit
+
+volumes:
+  mongodb-data:
+    driver: local
+    name: mongo-data
+  mongodb-log:
+    driver: local
+    name: mongo-log
+  feat_resources_volume:
+
+networks:
+  custom_network:
+    name: custom_network
+    driver: bridge
