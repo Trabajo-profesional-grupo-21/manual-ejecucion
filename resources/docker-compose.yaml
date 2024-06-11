@@ -34,7 +34,7 @@ services:
       - custom_network
 
   mongodb:
-    image: mongo:latest
+    image: mongo:4.4.18
     container_name: mongodb
     hostname: mongodb
     volumes:
@@ -121,6 +121,12 @@ services:
       - custom_network
     depends_on:
       - rabbitmq
+  
+  front:
+    image: tppg21/front:latest
+    container_name: front
+    ports:
+      - "3000:3000"
 
 volumes:
   mongodb-data:
