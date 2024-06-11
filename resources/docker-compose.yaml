@@ -19,6 +19,10 @@ services:
     - 5672:5672
     networks:
       - custom_network
+    depends_on:
+      - mongodb
+      - redis
+      - gcs
 
   gcs:
     image: fsouza/fake-gcs-server
@@ -81,10 +85,8 @@ services:
     networks:
       - custom_network
     depends_on:
-      - rabbitmq
-      - redis
-      - mongodb
-      - gcs
+      rabbitmq:
+        condition: service_healthy
     
   joiner:
     image: tppg21/joiner:latest
@@ -120,7 +122,8 @@ services:
     networks:
       - custom_network
     depends_on:
-      - rabbitmq
+      rabbitmq:
+        condition: service_healthy
 
 volumes:
   mongodb-data:
