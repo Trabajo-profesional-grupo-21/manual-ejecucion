@@ -37,12 +37,22 @@ services:
     networks:
       - custom_network
 
+  create_folder:
+    image: busybox
+    depends_on:
+      - gcs
+    entrypoint: ["/bin/sh", "-c", "mkdir -p /storage/tpp_videos"]
+    volumes:
+      - ./data:/storage
+    restart: "no"
+    networks:
+      - custom_network
+
   mongodb:
     image: mongo:4.4.18
     container_name: mongodb
     hostname: mongodb
     volumes:
-      - ./mongodb/initdb.d/mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
       - mongodb-data:/data/db/
       - mongodb-log:/var/log/mongodb/
     ports:
