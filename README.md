@@ -36,7 +36,7 @@ Para poder probar el sistema y ejecutar todos los componentes en simultaneo se b
 
 Con este método no es necesario clonar los repositorios ya que todas los servicios tomaran las imágenes desde DockerHub, en donde las almacenamos con los contenidos de las ramas `main` de cada repositorio.
 
-A su vez, el `docker-compose.yaml` creara servicios locales de RabbitMQ, Redis, MongoDB y tambien un emulador de Google Cloud Object Storage para que se pueda probar el sistema sin necesidad de crear instancias reales de estos servicios.
+A su vez, el `docker-compose.yaml` creara servicios locales de RabbitMQ, Redis, MongoDB para que se pueda probar el sistema sin necesidad de crear instancias reales de estos servicios.
 
 Pasos a seguir:
 
@@ -78,13 +78,13 @@ En primer lugar se deben iniciar los emuladores para luego iniciar los component
   docker network create custom_network
   ```
   
-  
-  
 - Clonar repositorio de [Storage](https://github.com/Trabajo-profesional-grupo-21/storage) y ejecutar `docker compose up`
+
+  **Importante:** el emulador local de google cloud object storage solo soporta archivos pequeños `~5MB`  
 
 - Clonar los componentes [Api](https://github.com/Trabajo-profesional-grupo-21/api), [Arousal processor](https://github.com/Trabajo-profesional-grupo-21/arousal-processor), [Valence processor](https://github.com/Trabajo-profesional-grupo-21/valence-processor) y [Joiner](https://github.com/Trabajo-profesional-grupo-21/joiner) y ejecutar en cada uno `docker compose up`. 
 
-  Considerar que la construcción de las imágenes puede demorar un tiempo considerable, así como también la descarga de los modelos pre-entrenados en `valence-processor`.
+  Tener en cuenta que la construcción de las imágenes puede demorar un tiempo considerable, así como también la descarga de los modelos pre-entrenados en `valence-processor`.
 
 - Luego de que todos los componente se encuentran corriendo se puede ejecutar el Frontend, clonando [el repositorio](https://github.com/Trabajo-profesional-grupo-21/front) y ejecutando nuevamente `docker compose up`
 
